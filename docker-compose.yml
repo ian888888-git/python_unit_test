@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  dataops-app:
+    build: .
+    container_name: dataops_local_container
+    volumes:
+      - .:/app
+    tty: true          # <-- TAMBAHKAN BARIS INI (Biar kontainer standby)
+    command: tail -f /dev/null
+    environment:
+      - ENV=development

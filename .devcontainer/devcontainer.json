@@ -1,0 +1,14 @@
+{
+  "name": "Python DataOps Sandbox",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dataops-app",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  }
+}

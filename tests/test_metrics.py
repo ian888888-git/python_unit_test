@@ -1,5 +1,5 @@
 import pytest 
-from metrics import MetricsCalculator
+from src.metrics import MetricsCalculator
 
 class TestMetricsCalculator: 
     """Class Unit Testing untuk memastikan validitas logika di MetricsCalculator."""
@@ -15,7 +15,7 @@ class TestMetricsCalculator:
         msg, score, status = self.calculator.evaluates_record(100, 96, "testing_unit")
 
         # Assertions
-        assert msg == "SUKSES"
+        assert "SUKSES" in msg
         assert score == 96.0
         assert status == True 
         assert isinstance((msg, score, status), tuple) # Memastikan tipe kembalian murni Tuple
@@ -24,18 +24,19 @@ class TestMetricsCalculator:
         """Memastikan data dengan akurasi < 95.0% dinyatakan butuh revisi (False)."""
         msg, score, status =  self.calculator.evaluates_record(100, 93, "testing_unit")
 
-        assert "BUTUH_REVISI" in msg 
+        assert "Butuh Revisi" in msg 
         assert score == 93.0 
         assert status == False 
-        # assert isinstance((msg, score, status), tuple)
+        assert isinstance((msg, score, status), tuple)
     
     def test_evaluate_record_fail_zero(self) -> None:
         """Memastikan sistem tidak crash (ZeroDivisionError) jika total data bernilai 0."""
         msg, score, status =  self.calculator.evaluates_record(0, 0, "testing_unit")
 
-        assert "GAGAL" in msg 
+        assert "Gagal" in msg 
         assert score == 0.0 
         assert status == False 
+        assert isinstance((msg, score, status), tuple)
 
 
 

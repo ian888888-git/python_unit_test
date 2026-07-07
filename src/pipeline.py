@@ -1,9 +1,9 @@
 from src.cleaner import DataCleaner
-from src.cleaner import MetricsCalculator
+from src.metrics import MetricsCalculator
 from src.transformer import DataTransformer
 
 class ProductionPipeline:
-    def __self__(self) -> None:
+    def __init__(self) -> None:
         # Enkapsulasi objek helper ke dalam properti class pipeline
         self.cleaner = DataCleaner()
         self.metrics_manager = MetricsCalculator()

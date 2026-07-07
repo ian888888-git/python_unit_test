@@ -1,6 +1,6 @@
 from src.pipeline import ProductionPipeline
 
-def bootstrap(self) -> None:
+def bootstrap() -> None:
     pipeline =  ProductionPipeline()
     pipeline.start()
 

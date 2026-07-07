@@ -1,9 +1,9 @@
 from src.cleaner import DataCleaner
-from src.cleaner import MetricsCalculator
+from src.metrics import MetricsCalculator
 from src.transformer import DataTransformer
 
 class ProductionPipeline:
-    def __self__(self) -> None:
+    def __init__(self) -> None:
         # Enkapsulasi objek helper ke dalam properti class pipeline
         self.cleaner = DataCleaner()
         self.metrics_manager = MetricsCalculator()
@@ -41,7 +41,7 @@ class ProductionPipeline:
         # Unpacking nilai tuple hasil kembalian dari metrics.py
         print(f"-> Log Status: {message}")
         print(f"-> Skor Akurasi: {score}%")
-        print(f"-> Status ML: {"LOLOS TRESHOLD 95%" if ml_status else "BUTUH REVISI"}")
+        print(f"-> Status ML: {'LOLOS TRESHOLD 95%' if ml_status else 'BUTUH REVISI'}")
 
         # ----------------------------------------------------------------------
         # TAHAP 3: MENJALANKAN TRANSFORMASI DATA

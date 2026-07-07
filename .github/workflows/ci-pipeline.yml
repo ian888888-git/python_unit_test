@@ -11,12 +11,14 @@ on:
     # Pipa akan berjalan setiap kali Anda melakukan 'git push' ke branch main atau ian-dev
     branches: [main, ian-dev]
   pull_request:
-  # Pipa juga akan berjalan saat Anda membuat Pull Request di GitHub menuju branch main
+    # Pipa juga akan berjalan saat Anda membuat Pull Request di GitHub menuju branch main
     branches: [main]
+
 # ==============================================================================
 # DAFTAR PEKERJAAN (Apa saja yang harus dilakukan oleh robot GitHub?)
 # ==============================================================================
 jobs:
+
   # ----------------------------------------------------------------------------
   # JOB 1: Uji Kualitas Kode (Linting & Testing Python)
   # ----------------------------------------------------------------------------
@@ -53,24 +55,22 @@ jobs:
         run: |
           # Robot mencari folder pengujian dan menjalankan Pytest untuk mengecek kebenaran logika fungsi
           pytest tests/
-# ----------------------------------------------------------------------------
-# JOB 2: Simulasi Pembuatan Kontainer (Gladi Resik Docker)
-# ----------------------------------------------------------------------------
-docker-build:
-  # Syarat mutlak: Job ini baru boleh berjalan KELAK JIKA Job 'quality-assurance' di atas lolos/sukses (Passed)
-  needs: quality-assurance 
-  # Robot akan menyewa komputer server gratis berbasis Ubuntu Linux versi terbaru
-  runs-on: ubuntu-latest 
-  steps:
-    # Langkah 1: Download kode ke server baru ini (karena server Job 1 tadi sudah dihancurkan)
-    - name: Download Source Code 
-      uses: actions/checkout@v4
-    # Langkah 2: Mengaktifkan fitur internal Docker di dalam server virtual Ubuntu milik GitHub
-    - name: Siapkan Engine Docker Buildx
-      uses: actions/setup-docker@v3
-    # Langkah 3: Uji coba merakit Dockerfile Anda menjadi sebuah Image
-    - name: Gladi Resik Docker Build 
-      run: |
-        # Memastikan file Dockerfile Anda valid, tidak ada salah ketik instruksi, dan build-nya sukses.
-        # Catatan: Image ini hanya dibuat untuk uji coba di memori server, setelah ini akan langsung dibuang otomatis.
-        docker build -t local-app-check:latest .
+
+  # ----------------------------------------------------------------------------
+  # JOB 2: Simulasi Pembuatan Kontainer (Gladi Resik Docker)
+  # ----------------------------------------------------------------------------
+  docker-build:
+    # Syarat mutlak: Job ini baru boleh berjalan KELAK JIKA Job 'quality-assurance' di atas lolos/sukses (Passed)
+    needs: quality-assurance 
+    # Robot akan menyewa komputer server gratis berbasis Ubuntu Linux versi terbaru
+    runs-on: ubuntu-latest 
+    steps:
+      # Langkah 1: Download kode ke server baru ini
+      - name: Download Source Code 
+        uses: actions/checkout@v4
+
+      # Langkah 2: Langsung uji coba merakit Dockerfile Anda menjadi sebuah Image
+      # (Tidak perlu memanggil 'uses: actions/setup-docker' karena Docker sudah bawaan lahir di Ubuntu GitHub)
+      - name: Gladi Resik Docker Build 
+        run: |
+          docker build -t local-app-check:latest .

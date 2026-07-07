@@ -1,11 +1,13 @@
 from src.cleaner import DataCleaner
 from src.cleaner import MetricsCalculator
+from src.transformer import DataTransformer
 
 class ProductionPipeline:
     def __self__(self) -> None:
         # Enkapsulasi objek helper ke dalam properti class pipeline
         self.cleaner = DataCleaner()
-        self.metrics_manager = MetricsCalculator
+        self.metrics_manager = MetricsCalculator()
+        self.transformer = DataTransformer()
     
     def start(self) -> None:
         print("\n=== [START] MEMULAI AUTOMATED DATA PIPELINE ===")
@@ -40,4 +42,18 @@ class ProductionPipeline:
         print(f"-> Log Status: {message}")
         print(f"-> Skor Akurasi: {score}%")
         print(f"-> Status ML: {"LOLOS TRESHOLD 95%" if ml_status else "BUTUH REVISI"}")
+
+        # ----------------------------------------------------------------------
+        # TAHAP 3: MENJALANKAN TRANSFORMASI DATA
+        # ----------------------------------------------------------------------
+        print("\n[3] Operasi Transformasi Matrix 2D...")
+        raw_data = [0.95, 0.92, 0.88, 0.91, 0.94, 0.89]
+        dimensions = (3,2)
+        try:
+            structured_matrix = self.transformer.reshape_matrix(raw_data, dimensions)
+            print(f"-> Sukses Matrix 2D {dimensions[0]}x{dimensions[1]}:")
+            for row in structured_matrix:
+                print(row)
+        except ValueError as e:
+            print(f"-> Terjadi Masalah Transformasi: {e}")
         print("\n=== [END] PIPELINE SELESAI DIALIRKAN DENGAN AMAN ===")

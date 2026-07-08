@@ -80,7 +80,7 @@ class ProductionPipeline:
         current_value = 93 # Nilai diatas batas toleransi
         try:
             anomaly_result = self.machine_anomaly_detector.is_machine_anomaly(current_value, history_data)
-            print(f"-> Hasil Deteksi Anomaly: {"TERDETEKSI" if anomaly_result else "TIDAK TERDETEKSI"}")
+            print(f"-> Hasil Deteksi Anomaly: {'TERDETEKSI' if anomaly_result else 'TIDAK TERDETEKSI'}")
         except ValueError as e:
             print(f"-> Terjadi Masalah Anomaly Machine: {e}")
         print("\n=== [END] PIPELINE SELESAI DIALIRKAN DENGAN AMAN ===")

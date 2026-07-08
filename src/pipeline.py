@@ -1,6 +1,7 @@
 from src.cleaner import DataCleaner
 from src.metrics import MetricsCalculator
 from src.transformer import DataTransformer
+from src.signal_processor import SignalProcessor
 
 class ProductionPipeline:
     def __init__(self) -> None:
@@ -8,6 +9,7 @@ class ProductionPipeline:
         self.cleaner = DataCleaner()
         self.metrics_manager = MetricsCalculator()
         self.transformer = DataTransformer()
+        self.signal_processor = SignalProcessor(window_size=5)
     
     def start(self) -> None:
         print("\n=== [START] MEMULAI AUTOMATED DATA PIPELINE ===")
@@ -56,4 +58,15 @@ class ProductionPipeline:
                 print(row)
         except ValueError as e:
             print(f"-> Terjadi Masalah Transformasi: {e}")
+        
+        # ----------------------------------------------------------------------
+        # TAHAP 4: SIGNAL PRCESSOR
+        # ----------------------------------------------------------------------
+        print("\n[4] Operasi Signal Processor...")
+        raw_sensor_data = [20, 24, 22, 28, 26]
+        try:
+            signal_result = self.signal_processor.compute_moving_average(raw_sensor_data)
+            print(f"-> Hasil rata-rata: {signal_result}")
+        except ValueError as e:
+            print(f"-> Terjadi Masalah Signal Processor: {e}")    
         print("\n=== [END] PIPELINE SELESAI DIALIRKAN DENGAN AMAN ===")

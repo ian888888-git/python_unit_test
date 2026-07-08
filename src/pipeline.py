@@ -2,6 +2,7 @@ from src.cleaner import DataCleaner
 from src.metrics import MetricsCalculator
 from src.transformer import DataTransformer
 from src.signal_processor import SignalProcessor
+from src.machine_anomaly_detector import MachineAnomalyDetector
 
 class ProductionPipeline:
     def __init__(self) -> None:
@@ -10,6 +11,7 @@ class ProductionPipeline:
         self.metrics_manager = MetricsCalculator()
         self.transformer = DataTransformer()
         self.signal_processor = SignalProcessor(window_size=5)
+        self.machine_anomaly_detector = MachineAnomalyDetector(z_treshold=3.0)
     
     def start(self) -> None:
         print("\n=== [START] MEMULAI AUTOMATED DATA PIPELINE ===")
@@ -69,4 +71,16 @@ class ProductionPipeline:
             print(f"-> Hasil rata-rata: {signal_result}")
         except ValueError as e:
             print(f"-> Terjadi Masalah Signal Processor: {e}")    
+        
+        # ----------------------------------------------------------------------
+        # TAHAP 5: ANOMAL MACHINE 
+        # ----------------------------------------------------------------------
+        print("\n[5] Deteksi Anomaly Machine...")
+        history_data = [70, 72, 68, 74] # Rata-rata 71, Deviasi 2.23
+        current_value = 93 # Nilai diatas batas toleransi
+        try:
+            anomaly_result = self.machine_anomaly_detector.is_machine_anomaly(current_value, history_data)
+            print(f"-> Hasil Deteksi Anomaly: {'TERDETEKSI' if anomaly_result else 'TIDAK TERDETEKSI'}")
+        except ValueError as e:
+            print(f"-> Terjadi Masalah Anomaly Machine: {e}")
         print("\n=== [END] PIPELINE SELESAI DIALIRKAN DENGAN AMAN ===")

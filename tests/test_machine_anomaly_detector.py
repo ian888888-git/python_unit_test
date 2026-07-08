@@ -1,5 +1,5 @@
 import pytest
-from src.anomaly_detector import MachineAnomalyDetector
+from src.machine_anomaly_detector import MachineAnomalyDetector
 
 class TestMachineAnomalyDetector: 
     # Testing konfigurasi z_treshold tidak bernilai negatif

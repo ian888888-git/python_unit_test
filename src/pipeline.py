@@ -4,6 +4,7 @@ from src.transformer import DataTransformer
 from src.signal_processor import SignalProcessor
 from src.machine_anomaly_detector import MachineAnomalyDetector
 from src.processors import SensorDataProcessor
+from src.telemetry_monitor import TelemetryMonitor
 
 class ProductionPipeline:
     def __init__(self) -> None:
@@ -14,6 +15,7 @@ class ProductionPipeline:
         self.signal_processor = SignalProcessor(window_size=5)
         self.machine_anomaly_detector = MachineAnomalyDetector(z_treshold=3.0)
         self.processor = SensorDataProcessor(offset=2.0, default_value=20.0)
+        self.telemetry_monitor = TelemetryMonitor(machine_id="M1", offset=2.0, default_value=20.0)
     
     def start(self) -> None:
         print("\n=== [START] MEMULAI AUTOMATED DATA PIPELINE ===")
@@ -89,7 +91,7 @@ class ProductionPipeline:
         # ----------------------------------------------------------------------
         # TAHAP 6: SENSOR DATA PROCESSOR 
         # ----------------------------------------------------------------------
-        print("\n[5] Sensor Data Processor...")
+        print("\n[6] Sensor Data Processor...")
         # 1. Inisialisasi processor dengan parameter kalibrasi mesin CNC 1
         process_cnc_temp = SensorDataProcessor(offset=2.5, default_value=20.0)
     
@@ -104,4 +106,29 @@ class ProductionPipeline:
             clean_value = process_cnc_temp(data)
             clean_data_output.append(clean_value)
 
+        # ----------------------------------------------------------------------
+        # TAHAP 7: TELEMETRY MONITOR 
+        # ----------------------------------------------------------------------
+        print("\n[7] Telemetry Monitor...")
+        # 1. Menginisialisasi komponen monitor untuk 2 mesin berbeda di pabrik
+        factory_monitor = [
+            TelemetryMonitor(machine_id="CNC-01", offset=2.5),
+            TelemetryMonitor(machine_id="CNC-02", offset=1.2, default_value=24.0)
+        ]
+
+        print("--- 1. Pengecekan Status via __str__ ---")
+        for data_mesin in factory_monitor:
+            print(data_mesin)
+        
+        print("\n--- 2. Eksekusi Aliran Data via __call__ ---")
+        # Mengambil salah satu monitor untuk memproses data stream (ada data None/rusak)
+        mesin_cnc_01 = factory_monitor[0]
+        raw_data_stream = [39.0, None, 41.5]
+        for raw_data in raw_data_stream:
+            clean_data = mesin_cnc_01(raw_data) # Objek dieksekusi seperti fungsi biasa
+            print(f"-> Raw Input: {raw_data}, Clear Output: {clean_data} °C")
+
+        print("\n--- 3. Simulasi Log Kegagalan Cloud via __repr__ ---")
+        # Jika List komponen dilempar ke sistem logging saat crash, __repr__ akan menyelamatkan Anda
+        print(f"[CRITICAL ERROR LOG] Pipeline terhenti! Dump status komponen aktif:{factory_monitor} \n")
         print("\n=== [END] PIPELINE SELESAI DIALIRKAN DENGAN AMAN ===")

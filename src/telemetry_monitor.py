@@ -32,4 +32,4 @@ class TelemetryMonitor:
     
     def __repr__(self) -> str:
         """Materi 2: Dokumen parameter internal untuk kebutuhan log error di server cloud."""
-        return(f"CncTelemetryMonitor(machine_id={self.machine_id}," f"offset={self.offset}, default_value={self.default_value})")
+        return(f"CncTelemetryMonitor(machine_id={self.machine_id}," f"offset={self.offset}," f"default_value={self.default_value})")

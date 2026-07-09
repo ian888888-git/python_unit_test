@@ -3,6 +3,7 @@ from src.metrics import MetricsCalculator
 from src.transformer import DataTransformer
 from src.signal_processor import SignalProcessor
 from src.machine_anomaly_detector import MachineAnomalyDetector
+from src.processors import SensorDataProcessor
 
 class ProductionPipeline:
     def __init__(self) -> None:
@@ -12,6 +13,7 @@ class ProductionPipeline:
         self.transformer = DataTransformer()
         self.signal_processor = SignalProcessor(window_size=5)
         self.machine_anomaly_detector = MachineAnomalyDetector(z_treshold=3.0)
+        self.processor = SensorDataProcessor(offset=2.0, default_value=20.0)
     
     def start(self) -> None:
         print("\n=== [START] MEMULAI AUTOMATED DATA PIPELINE ===")
@@ -83,4 +85,23 @@ class ProductionPipeline:
             print(f"-> Hasil Deteksi Anomaly: {'TERDETEKSI' if anomaly_result else 'TIDAK TERDETEKSI'}")
         except ValueError as e:
             print(f"-> Terjadi Masalah Anomaly Machine: {e}")
+        
+        # ----------------------------------------------------------------------
+        # TAHAP 6: SENSOR DATA PROCESSOR 
+        # ----------------------------------------------------------------------
+        print("\n[5] Sensor Data Processor...")
+        # 1. Inisialisasi processor dengan parameter kalibrasi mesin CNC 1
+        process_cnc_temp = SensorDataProcessor(offset=2.5, default_fill=20.0)
+    
+        # 2. Simulasi data streaming yang masuk dari hulu (CDC/Kafka)
+        # Terdapat data normal, data ekstrem, dan data None (sensor sempat mati)
+        raw_data_stream = [38.5, None, 41.2, 39.0, None]
+
+        # 3. Kontainer untuk menampung data yang sudah bersih & siap dipakai
+        clean_data_output = []
+        for data in raw_data_stream:
+            # Objek dipanggil langsung seperti fungsi berkat method __call__
+            clean_value = process_cnc_temp(data)
+            clean_data_output.append(clean_value)
+
         print("\n=== [END] PIPELINE SELESAI DIALIRKAN DENGAN AMAN ===")

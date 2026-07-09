@@ -17,4 +17,4 @@ class TestTelemetryMonitor:
         """Memastikan format cetakan teks log tidak berubah dan terkunci."""
         monitor =  TelemetryMonitor(machine_id="CNC-01", offset=3.0, default_value=5.0)
         assert str(monitor) == "Telematri Monitor Aktif -> Mesin ID: CNC-01"
-        assert repr(monitor) == "TelemetryMonitor(machine_id='CNC-01', offset=3.0, default_value=5.0)"
+        assert repr(monitor) == "CncTelemetryMonitor(machine_id='CNC-01', offset=3.0, default_value=5.0)"

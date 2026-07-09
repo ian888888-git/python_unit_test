@@ -91,7 +91,7 @@ class ProductionPipeline:
         # ----------------------------------------------------------------------
         print("\n[5] Sensor Data Processor...")
         # 1. Inisialisasi processor dengan parameter kalibrasi mesin CNC 1
-        process_cnc_temp = SensorDataProcessor(offset=2.5, default_fill=20.0)
+        process_cnc_temp = SensorDataProcessor(offset=2.5, default_value=20.0)
     
         # 2. Simulasi data streaming yang masuk dari hulu (CDC/Kafka)
         # Terdapat data normal, data ekstrem, dan data None (sensor sempat mati)
